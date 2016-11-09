@@ -29,7 +29,8 @@ class Animation {
   get render()  {return this._render;}
 
   // Setters
-  set slow(value)   {this._slow = value;}
+  set slow(value)   {this._slow = value;
+                    this._slowStep = this._slow * this._step;}
   set step(value)   {this._step = value;
                      this._slowStep = this._slow * this._step;}
   set update(value) {this._update = value;}
