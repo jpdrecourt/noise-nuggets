@@ -14,14 +14,20 @@ document.body.appendChild(renderer.domElement);
 
 
 // Line
-let lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
-let lineGeometry = new THREE.Geometry();
-lineGeometry.vertices.push(
+// let lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+// let lineGeometry = new THREE.Geometry();
+// lineGeometry.vertices.push(
+//   new THREE.Vector3(-window.innerWidth/2, 0, 0),
+//   new THREE.Vector3(window.innerWidth/2, 0, 0)
+// );
+// var line = new THREE.Line( lineGeometry, lineMaterial );
+// scene.add( line );
+
+// Line
+let line = new shapes2D.line(
   new THREE.Vector3(-window.innerWidth/2, 0, 0),
-  new THREE.Vector3(window.innerWidth/2, 0, 0)
-);
-var line = new THREE.Line( lineGeometry, lineMaterial );
-scene.add( line );
+  new THREE.Vector3(window.innerWidth/2, 0, 0));
+line.addTo(scene);
 
 // Square
 let square = new shapes2D.square(30);

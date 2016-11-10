@@ -40,9 +40,6 @@ class square {
   get mesh()      {return this._mesh;}
   get colorHex()  {return this._material.color.getHex();}
   // Setters
-  set position(value) {
-    this.mesh.position.set = (value.x, value.y, value.z);
-  }
   set colorHex(value) {
     this.material.color.setHex(value);
   }
@@ -55,8 +52,48 @@ class square {
   }
 }
 
+/*
+ * Creates a straight line with a beginning and an end
+ * constructor:
+ * line(start, end, material)
+ * start: starting point as a THREE Vector3
+ * end: end point as a THREE Vector3
+ * material: THREE LineMaterial default to LineBasicMaterial({ color: 0xffffff })
+ *
+ * Method:
+ * addTo(scene): adds the line to a THREE scene
+ */
 class line {
-
+  constructor(start, end, material) {
+    this._material = material ||
+      new THREE.LineBasicMaterial({ color: 0xffffff });
+    let geometry = new THREE.Geometry();
+    geometry.vertices.push(start, end);
+    this._mesh = new THREE.Line( geometry, this._material );
+  }
+  // Getters
+  get start()     {
+    // Allow for update of the line if the vector is changed
+    this.mesh.geometry.verticesNeedUpdate = true;
+    return this.mesh.geometry.vertices[0];}
+  get end()       {
+    // Allow for update of the line if the vector is changed
+    this.mesh.geometry.verticesNeedUpdate = true;
+    return this.mesh.geometry.vertices[1];}
+  get material()  {return this._material;}
+  get mesh()      {return this._mesh;}
+  get colorHex()  {return this._material.color.getHex();}
+  // Setters
+  set colorHex(value) {
+    this.material.color.setHex(value);
+  }
+  set material(value) {
+    this.material = value;
+  }
+  // Adds the line to a THREE scene
+  addTo(scene) {
+    scene.add(this.mesh);
+  }
 }
 
 module.exports.square = square;
