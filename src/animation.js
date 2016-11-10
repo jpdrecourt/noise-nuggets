@@ -12,7 +12,7 @@
 
 class Animation {
   constructor (update, render) {
-    this._maxDt = 1; // Maximum DT between two updates (in case animation stops)
+    this._maxDt = 1; // Maximum DT (s) between two updates (in case animation stops)
     this._last = undefined;
     this._dt = 0;
     this._slow = 1;
@@ -32,7 +32,7 @@ class Animation {
   set slow(value)   {this._slow = value;
                     this._slowStep = this._slow * this._step;}
   set step(value)   {this._step = value;
-                     this._slowStep = this._slow * this._step;}
+                    this._slowStep = this._slow * this._step;}
   set update(value) {this._update = value;}
   set render(value) {this._render = value;}
 
