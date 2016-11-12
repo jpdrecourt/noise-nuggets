@@ -1,21 +1,19 @@
 /*
  * 2D shapes created out of THREE  meshes
  */
-
 const THREE = require('three');
-
 /*
  * Creates a square centered on a given position and with a given size
- * new square(position, size [, material])
+ * new Square(position, size [, material])
  * size: float in pixels
- * position: THREE.Vector3 object, defaults to new Vector3(0,0,0);
+ * position: THREE.Vector3 object or object with {x, y, z} properties;
  * material: THREE material object, defaults to MeshBasicMaterial({ color: 0xffffff })
  *
  * Methods:
  * addTo(scene) : adds the square to a THREE scene
  */
 
-class square {
+class Square {
   constructor(size, position, material) {
     this._size = size;
     this._material = material ||
@@ -56,18 +54,20 @@ class square {
  * Creates a straight line with a beginning and an end
  * constructor:
  * line(start, end, material)
- * start: starting point as a THREE Vector3
+ * start: starting point as an object with (x, y, z) properties array of coordinates
  * end: end point as a THREE Vector3
  * material: THREE LineMaterial default to LineBasicMaterial({ color: 0xffffff })
  *
  * Method:
  * addTo(scene): adds the line to a THREE scene
  */
-class line {
+class Line {
   constructor(start, end, material) {
     this._material = material ||
       new THREE.LineBasicMaterial({ color: 0xffffff });
     let geometry = new THREE.Geometry();
+    let startVec = new THREE.Vector3(start.x, start.y, start.z);
+    let endVec = new THREE.Vector3(end.y, end.y, end.z);
     geometry.vertices.push(start, end);
     this._mesh = new THREE.Line( geometry, this._material );
   }
@@ -96,5 +96,5 @@ class line {
   }
 }
 
-module.exports.square = square;
-module.exports.line = line;
+module.exports.Square = Square;
+module.exports.Line = Line;

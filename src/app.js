@@ -1,51 +1,39 @@
-let THREE = require('three');
-let Animation = require('./animation');
-let shapes2D = require('./shapes2D');
+const THREE = require('three');
+const ANIM = require('./animation');
+const SHAPES2D = require('./shapes2D');
+// const ASSETS = require('./assets');
+const TAPE = require('./tape');
 
+// Initialize THREE
+// ----------------------------------------------------------------------------
 let scene = new THREE.Scene();
 // let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 let camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, -1000, 1000 );
-camera.position.z = 0;
-// camera.position.x = 30;
-// camera.position.y = 30;
 let renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+// ---------------------------------------------------------------------------
 
+// Add tape
+let tape = new TAPE.Tape(0, true);
+tape.drawOn(scene);
 
-// Line
-// let lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
-// let lineGeometry = new THREE.Geometry();
-// lineGeometry.vertices.push(
-//   new THREE.Vector3(-window.innerWidth/2, 0, 0),
-//   new THREE.Vector3(window.innerWidth/2, 0, 0)
-// );
-// var line = new THREE.Line( lineGeometry, lineMaterial );
-// scene.add( line );
+// Add head
+let head = new TAPE.Head(tape, 0, false);
+head.drawOn(scene);
 
-// Line
-let line = new shapes2D.line(
-  new THREE.Vector3(-window.innerWidth/2, 0, 0),
-  new THREE.Vector3(window.innerWidth/2, 0, 0));
-line.addTo(scene);
-
-// Square
-let square = new shapes2D.square(30);
-square.addTo(scene);
-
-// Animation dynamics
+// Animation setup
+// ---------------------------------------------------------------------------
+// Update animations physics
 let update = (step) => {
-  square.position.x += 120 * step;
-  if (square.position.x > window.innerWidth/2) {
-    square.position.x = -square.position.x;
-  }
+  head.update(step);
 };
-
+// Render animation
 let render = (dt) => {
+  head.render(dt);
   renderer.render(scene, camera);
 };
-
-let animation = new Animation.Animation(update, render);
+// Define the animation dynamics
+let animation = new ANIM.Animation(update, render);
 animation.run();
-
-// 2D representation - http://stackoverflow.com/questions/21786184/setting-up-a-2d-view-in-three-js / See update 4
+// ---------------------------------------------------------------------------
