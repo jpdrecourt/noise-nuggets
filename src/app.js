@@ -15,22 +15,26 @@ document.body.appendChild(renderer.domElement);
 // ---------------------------------------------------------------------------
 
 // Add tape
-let tape = new TAPE.Tape(0, true);
+let tape = new TAPE.Tape(0, false);
 tape.drawOn(scene);
 
 // Add head
 let head = new TAPE.Head(tape, 0, false);
 head.drawOn(scene);
 
+// Add sound event
+let soundEvent = new TAPE.SoundEvent(tape, 0);
+soundEvent.drawOn(scene);
+
 // Animation setup
 // ---------------------------------------------------------------------------
 // Update animations physics
 let update = (step) => {
-  head.update(step);
+  tape.update(step);
 };
 // Render animation
 let render = (dt) => {
-  head.render(dt);
+  tape.render(dt);
   renderer.render(scene, camera);
 };
 // Define the animation dynamics
