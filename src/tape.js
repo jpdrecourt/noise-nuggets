@@ -7,8 +7,7 @@ const SHAPES2D = require(`./shapes2D`);
 // TODO Doc
 class Event {
   constructor(tape, position) {
-    this.drawOn = (scene) => {return;};
-    this.fire = () => {return;};
+    this.firingHead = undefined;
     this.isFired = false;
     this.tape = tape;
     tape.addEvent(this);
@@ -16,21 +15,31 @@ class Event {
     // Make sure the position is on the tape
     if (this.position < tape.start) this.position = tape.start;
     if (this.position > tape.end) this.position = tape.end;
-    this.render = () => {return;};
     this.sprite = undefined;
-    this.update = () => {return;};
   }
+  // Allows for custom general events
   drawOn(scene) {
-    this.drawOn(scene);
+    return;
   }
-  fire() {
-    this.fire(...arguments);
+  firedBy (head) {
+    // Fires if the head is exactly on the event
+    // Or if the event is strictly between the previous and current head position
+    if ((head.position == this.position) ||
+    (head.position - this.position) * (head.PreviousPosition - this.position) < 0){
+      this.isFired = true;
+      this.firingHead = head;
+    }
   }
-  render(dt) {
-    this.render(dt);
+  render() {
+    return;
   }
-  update(step) {
-    this.update(step);
+  update() {
+    if (this.isFired) {
+      console.log('Fired!');
+      this.isFired = false;
+      this.firingHead = undefined;
+    }
+    return;
   }
 }
 
@@ -38,25 +47,28 @@ class SoundEvent extends Event {
   constructor(tape, position, howl) {
     super(tape, position);
     this.howl = howl;
-    this.drawOn = (scene) => {
-      // debugger
-      let x, y;
-      if (this.tape.isHorizontal) {
-        x = this.position;
-        y = this.tape.position;
-        // Draw a vertical line
-        this.sprite = new SHAPES2D.Line(
-          {x: x, y: y - 20, z: 0},
-          {x: x, y: y + 50, z: 0});
-      } else {
-        x = this.tape.position;
-        y = this.position;
-        this.sprite = new SHAPES2D.Line(
-          {x: x + 20, y: y, z: 0},
-          {x: x - 50, y: y, z: 0});
-      }
-      this.sprite.addTo(scene);
-    };
+  }
+  drawOn (scene) {
+    super.drawOn(scene);
+    let x, y;
+    if (this.tape.isHorizontal) {
+      x = this.position;
+      y = this.tape.position;
+      // Draw a vertical line
+      this.sprite = new SHAPES2D.Line(
+        {x: x, y: y - 20, z: 0},
+        {x: x, y: y + 50, z: 0});
+    } else {
+      x = this.tape.position;
+      y = this.position;
+      this.sprite = new SHAPES2D.Line(
+        {x: x + 20, y: y, z: 0},
+        {x: x - 50, y: y, z: 0});
+    }
+    this.sprite.addTo(scene);
+  }
+  update () {
+    super.update();
   }
 }
 
@@ -70,6 +82,7 @@ class Head {
       this.isForward = isForward;
     }
     this.position = position || 0; // Linear position on the tape
+    this.previousPosition = this.position;
     this.tape = tape;
     this._size = 30;
     this._speed = this.direction * 180;
@@ -106,6 +119,7 @@ class Head {
   }
   // Update the tape
   update(step) {
+    this.PreviousPosition = this.position;
     this.position += this._speed * step;
   }
 }
@@ -152,7 +166,7 @@ class Tape {
       head.update(step);
       // Fire an event if the head just went past it
       this.events.forEach((event) => {
-        // TODO Fire event
+        event.firedBy(head);
         event.update(step);
       });
     });

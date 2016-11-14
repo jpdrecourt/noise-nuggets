@@ -23,7 +23,7 @@ let head = new TAPE.Head(tape, 0, false);
 head.drawOn(scene);
 
 // Add sound event
-let soundEvent = new TAPE.SoundEvent(tape, 0);
+let soundEvent = new TAPE.SoundEvent(tape, -250);
 soundEvent.drawOn(scene);
 
 // Animation setup
