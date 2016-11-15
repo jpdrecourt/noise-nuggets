@@ -1,7 +1,7 @@
 const THREE = require('three');
 const ANIM = require('./animation');
 const SHAPES2D = require('./shapes2D');
-// const ASSETS = require('./assets');
+const ASSETS = require('./assets');
 const TAPE = require('./tape');
 
 // Initialize THREE
@@ -12,32 +12,47 @@ let camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.inner
 let renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-// ---------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// Graphical interface
+// -----------------------------------------------------------------------------
+ASSETS.load(() => {
+  // ----------------------------------------------------------------------------
+  // Initialize objects
+  // ----------------------------------------------------------------------------
+  // Add tape
+  let tape = new TAPE.Tape(0, false);
+  tape.drawOn(scene);
 
-// Add tape
-let tape = new TAPE.Tape(0, false);
-tape.drawOn(scene);
+  // Add loop
+  let loop = new TAPE.LoopEvent(tape, -400, 400);
+  loop.drawOn(scene);
 
-// Add head
-let head = new TAPE.Head(tape, 0, false);
-head.drawOn(scene);
+  // Add head
+  let head = new TAPE.Head(tape, 0, false);
+  head.drawOn(scene);
+  let head2 = new TAPE.Head(tape, 0, true);
+  head2.drawOn(scene);
+  head2.sprite.colorHex = 0xff0000;
+  let head3 = new TAPE.Head(tape, 40, true);
+  head3.drawOn(scene);
+  head3.sprite.colorHex = 0x00ff00;
 
-// Add sound event
-let soundEvent = new TAPE.SoundEvent(tape, -250);
-soundEvent.drawOn(scene);
-
-// Animation setup
-// ---------------------------------------------------------------------------
-// Update animations physics
-let update = (step) => {
-  tape.update(step);
-};
-// Render animation
-let render = (dt) => {
-  tape.render(dt);
-  renderer.render(scene, camera);
-};
-// Define the animation dynamics
-let animation = new ANIM.Animation(update, render);
-animation.run();
-// ---------------------------------------------------------------------------
+  // Add sound event
+  let soundEvent = new TAPE.SoundEvent(tape, -250, ASSETS.sounds.bell.howl);
+  soundEvent.drawOn(scene);
+  // ---------------------------------------------------------------------------
+  // Animation setup
+  // ---------------------------------------------------------------------------
+  // Update animations physics
+  let update = (step) => {
+    tape.update(step);
+  };
+  // Render animation
+  let render = (dt) => {
+    tape.render(dt);
+    renderer.render(scene, camera);
+  };
+  // Define the animation dynamics
+  let animation = new ANIM.Animation(update, render);
+  animation.run();
+});

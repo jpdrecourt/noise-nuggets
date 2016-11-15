@@ -3,8 +3,10 @@
  */
 const SHAPES2D = require(`./shapes2D`);
 
-// Class defining a general event - Fully cu
-// TODO Doc
+/*
+ * Class defining a general event - Fully customisable
+ * TODO Doc
+ */
 class Event {
   constructor(tape, position) {
     this.firingHead = undefined;
@@ -22,10 +24,13 @@ class Event {
     return;
   }
   firedBy (head) {
-    // Fires if the head is exactly on the event
-    // Or if the event is strictly between the previous and current head position
-    if ((head.position == this.position) ||
-    (head.position - this.position) * (head.PreviousPosition - this.position) < 0){
+    // Fires if the head passes the event
+    // Makes sure it doesn't fire in case of loop
+    if ((head.position == this.position) || // Exactly on the event
+        (head.isForward && // Passing the event in the forward direction
+          (head.position > this.position) && (head.PreviousPosition < this.position)) ||
+        (!head.isForward && // Passing the event in the backward direction
+          (head.position < this.position) && (head.PreviousPosition > this.position))) {
       this.isFired = true;
       this.firingHead = head;
     }
@@ -35,14 +40,16 @@ class Event {
   }
   update() {
     if (this.isFired) {
-      console.log('Fired!');
       this.isFired = false;
       this.firingHead = undefined;
     }
     return;
   }
 }
-
+/*
+ * Sound event - Subclass of event
+ * TODO Doc
+ */
 class SoundEvent extends Event {
   constructor(tape, position, howl) {
     super(tape, position);
@@ -67,7 +74,67 @@ class SoundEvent extends Event {
     }
     this.sprite.addTo(scene);
   }
+
   update () {
+    if (this.isFired) {
+      this.sprite.material.linewidth = 3;
+      setTimeout(() => {this.sprite.material.linewidth = 1;}, 150);
+      this.howl.play();
+    }
+    super.update();
+  }
+}
+/*
+ * Loop event - Subclass of Event
+ * TODO Documentation
+ */
+class LoopEvent extends Event {
+  constructor(tape, back, front) {
+    super(tape, back); // Position will hold the upstream part of the loop
+    this.backPosition = back;
+    this.frontPosition = front;
+    this.backSprite = undefined;
+    this.fromtSprite = undefined;
+    this._height = 40;
+  }
+  drawOn(scene) {
+    super.drawOn(scene);
+    let rotation, backXYZ, frontXYZ;
+    if (this.tape.isHorizontal) {
+      rotation = 0;
+      backXYZ = {x: this.backPosition, y: this.tape.position, z: 0};
+      frontXYZ = {x: this.frontPosition, y: this.tape.position, z: 0};
+    } else {
+      rotation = Math.PI/2;
+      backXYZ = {x: this.tape.position, y: this.backPosition, z: 0};
+      frontXYZ = {x: this.tape.position, y: this.frontPosition, z: 0};
+    }
+    this.backSprite = new SHAPES2D.Bracket(backXYZ, this._height, rotation);
+    this.frontSprite = new SHAPES2D.Bracket(frontXYZ, this._height, Math.PI + rotation);
+    this.backSprite.addTo(scene);
+    this.frontSprite.addTo(scene);
+  }
+  firedBy(head) {
+    if (head.isForward) {
+      this.position = this.frontPosition;
+    } else {
+      this.position = this.backPosition;
+    }
+    super.firedBy(head);
+  }
+  update () {
+    if (this.isFired) {
+      this.backSprite.material.linewidth = 3;
+      this.frontSprite.material.linewidth = 3;
+      setTimeout(() => {
+        this.backSprite.material.linewidth = 1;
+        this.frontSprite.material.linewidth = 1;}, 150);
+      if (this.firingHead.isForward) {
+        this.firingHead.position = this.backPosition;
+      } else {
+        this.firingHead.position = this.frontPosition;
+      }
+    }
     super.update();
   }
 }
@@ -84,7 +151,7 @@ class Head {
     this.position = position || 0; // Linear position on the tape
     this.previousPosition = this.position;
     this.tape = tape;
-    this._size = 30;
+    this._size = 25;
     this._speed = this.direction * 180;
     this.sprite = undefined;
     this.tape.addHead(this);
@@ -183,5 +250,6 @@ class Tape {
 
 module.exports.Event = Event;
 module.exports.SoundEvent = SoundEvent;
+module.exports.LoopEvent = LoopEvent;
 module.exports.Head = Head;
 module.exports.Tape = Tape;
