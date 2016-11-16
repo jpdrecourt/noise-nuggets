@@ -2,13 +2,21 @@
  * Create tapes, tape head and event objects
  */
 const SHAPES2D = require(`./shapes2D`);
+const UUID = require(`node-uuid`);
 
+class Item {
+  constructor(id) {
+    this._id = id || UUID.v1();
+  }
+  get id() {return this._id;}
+}
 /*
  * Class defining a general event - Fully customisable
  * TODO Doc
  */
-class Event {
-  constructor(tape, position) {
+class Event extends Item {
+  constructor(tape, position, id) {
+    super(id);
     this.firingHead = undefined;
     this.isFired = false;
     this.tape = tape;
@@ -51,8 +59,8 @@ class Event {
  * TODO Doc
  */
 class SoundEvent extends Event {
-  constructor(tape, position, howl) {
-    super(tape, position);
+  constructor(tape, position, howl, id) {
+    super(tape, position, id);
     this.howl = howl;
   }
   drawOn (scene) {
@@ -89,10 +97,10 @@ class SoundEvent extends Event {
  * TODO Documentation
  */
 class LoopEvent extends Event {
-  constructor(tape, back, front) {
-    super(tape, back); // Position will hold the upstream part of the loop
-    this.backPosition = back;
-    this.frontPosition = front;
+  constructor(tape, back, front, id) {
+    super(tape, back, id); // Position will hold the upstream part of the loop
+    this.backPosition = back || this.tape.start;
+    this.frontPosition = front || this.tape.end;
     this.backSprite = undefined;
     this.fromtSprite = undefined;
     this._height = 40;
@@ -141,8 +149,9 @@ class LoopEvent extends Event {
 
 // Class defining a tape head
 // TODO Doc
-class Head {
-  constructor(tape, position, isForward) {
+class Head extends Item {
+  constructor(tape, position, isForward, id) {
+    super(id);
     if (isForward === undefined) {
       this.isForward = true;
     } else {
@@ -192,8 +201,9 @@ class Head {
 }
 // Tape class - Object on which tape heads and events are attached
 // TODO Doc
-class Tape {
-  constructor(position, isHorizontal, start, end) {
+class Tape extends Item {
+  constructor(position, isHorizontal, start, end, id) {
+    super(id);
     this.position = position || 0.0;
     if (isHorizontal === undefined) {
       this.isHorizontal = true;
@@ -247,6 +257,54 @@ class Tape {
     });
   }
 }
+
+/*
+ * Returns the item with the id (or undefined);
+ */
+let findById = (itemArray, id) => {
+  return itemArray.filter((item) => {
+    return item.id == id;
+  })[0];
+};
+/*
+ * Instantiates the items in a tapeItems array
+ */
+exports.createTapeItems = (ASSETS) => {
+  let tapeObjects = {
+    tapes: [],
+    heads: [],
+    events: []
+  };
+  let theTape;
+  ASSETS.data.tapeItems.forEach((item) => {
+    if (item.type !== "Tape") {
+      theTape = findById(tapeObjects.tapes, item.tapeId);
+    }
+    switch (item.type) {
+      case "Tape":
+        tapeObjects.tapes.push(new Tape(item.position, item.isHorizontal, item.start, item.end, item.id));
+        break;
+      case "LoopEvent":
+        tapeObjects.events.push(new LoopEvent(theTape, item.back, item.front, item.id));
+        break;
+      case "SoundEvent":
+        tapeObjects.events.push(new SoundEvent(theTape, item.position, ASSETS.sounds[item.sound].howl));
+        break;
+      case "Head":
+        tapeObjects.heads.push(new Head(theTape, item.position, item.isForward, item.id));
+        break;
+    }
+  });
+  return tapeObjects;
+};
+
+exports.drawTapeObjects = (tapeObjects, scene) => {
+  for (let key in tapeObjects) {
+    tapeObjects[key].forEach((object) => {
+      object.drawOn(scene);
+    });
+  }
+};
 
 module.exports.Event = Event;
 module.exports.SoundEvent = SoundEvent;

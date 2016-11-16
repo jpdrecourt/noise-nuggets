@@ -10,11 +10,9 @@
  *
  */
 const howler = require('howler');
-// Assets
-const SOUND_DIR = './web/assets/sounds/';
-let sounds = {
-  'bell': {'file': SOUND_DIR + 'Bell_A3'}
-};
+
+let sounds = require('./sounds');
+let data = require('./data');
 let imgs = {};
 
 exports.load = (callback) => {
@@ -34,3 +32,4 @@ exports.load = (callback) => {
 
 exports.imgs = imgs;
 exports.sounds = sounds;
+exports.data = data;

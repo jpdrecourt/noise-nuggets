@@ -1,0 +1,63 @@
+{
+  "tapeItems": [
+    {
+      "id": "Tape1",
+      "type": "Tape",
+      "position": 0,
+      "isHorizontal": false
+    },
+    {
+      "id": "Tape2",
+      "type": "Tape",
+      "position" : 150,
+      "start": -450,
+      "end": 300,
+      "isHorizontal": true
+    },
+    {
+      "id": "Loop1",
+      "type": "LoopEvent",
+      "tapeId": "Tape1",
+    },
+    {
+      "id": "Loop2",
+      "type": "LoopEvent",
+      "tapeId": "Tape2",
+    },
+    {
+      "id": "Head1",
+      "type": "Head",
+      "tapeId": "Tape1",
+      "position": 0,
+      "isForward": false
+    },
+    {
+      "id": "Head2",
+      "type": "Head",
+      "tapeId": "Tape2",
+      "position": -78,
+      "isForward": true
+    },
+    {
+      "id": "Sound1",
+      "type": "SoundEvent",
+      "tapeId": "Tape1",
+      "position": -250,
+      "sound": "bell"
+    },
+    {
+      "id": "Sound2",
+      "type": "SoundEvent",
+      "tapeId": "Tape2",
+      "position": 130,
+      "sound": "laugh"
+    },
+    {
+      "id": "Sound3",
+      "type": "SoundEvent",
+      "tapeId": "Tape2",
+      "position": -40,
+      "sound": "bell"
+    }
+  ]
+}

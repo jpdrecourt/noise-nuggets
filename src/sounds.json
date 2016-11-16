@@ -1,0 +1,7 @@
+{
+  "bell": {
+    "file": "./web/assets/sounds/Bell_A3"},
+  "laugh": {
+    "file": "./web/assets/sounds/laugh"
+  }
+}

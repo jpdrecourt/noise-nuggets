@@ -19,37 +19,37 @@ ASSETS.load(() => {
   // ----------------------------------------------------------------------------
   // Initialize objects
   // ----------------------------------------------------------------------------
-  // Add tape
-  let tape = new TAPE.Tape(0, false);
-  tape.drawOn(scene);
+  let tapeObjects = TAPE.createTapeItems(ASSETS);
+  TAPE.drawTapeObjects(tapeObjects, scene); // TODO Make this elegant!
 
-  // Add loop
-  let loop = new TAPE.LoopEvent(tape, -400, 400);
-  loop.drawOn(scene);
-
-  // Add head
-  let head = new TAPE.Head(tape, 0, false);
-  head.drawOn(scene);
-  let head2 = new TAPE.Head(tape, 0, true);
-  head2.drawOn(scene);
-  head2.sprite.colorHex = 0xff0000;
-  let head3 = new TAPE.Head(tape, 40, true);
-  head3.drawOn(scene);
-  head3.sprite.colorHex = 0x00ff00;
-
-  // Add sound event
-  let soundEvent = new TAPE.SoundEvent(tape, -250, ASSETS.sounds.bell.howl);
-  soundEvent.drawOn(scene);
-  // ---------------------------------------------------------------------------
+  // // Add head
+  // let head = new TAPE.Head(tape, 0, false);
+  // head.drawOn(scene);
+  // let head2 = new TAPE.Head(tape, 0, true);
+  // head2.drawOn(scene);
+  // head2.sprite.colorHex = 0xff0000;
+  // let head3 = new TAPE.Head(tape, 40, true);
+  // head3.drawOn(scene);
+  // head3.sprite.colorHex = 0x00ff00;
+  //
+  // // Add sound event
+  // let soundEvent = new TAPE.SoundEvent(tape, -250, ASSETS.sounds.bell.howl);
+  // soundEvent.drawOn(scene);
+  //---------------------------------------------------------------------------
   // Animation setup
   // ---------------------------------------------------------------------------
   // Update animations physics
   let update = (step) => {
-    tape.update(step);
+    // tape.update(step);
+    tapeObjects.tapes.forEach((tape) => {
+      tape.update(step);
+    });
   };
   // Render animation
   let render = (dt) => {
-    tape.render(dt);
+    tapeObjects.tapes.forEach((tape) => {
+      tape.render(dt);
+    });
     renderer.render(scene, camera);
   };
   // Define the animation dynamics

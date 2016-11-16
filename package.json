@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "howler": "^2.0.1",
+    "node-uuid": "^1.4.7",
     "three": "^0.82.1"
   }
 }
