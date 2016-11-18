@@ -71,14 +71,14 @@ class SoundEvent extends Event {
       y = this.tape.position;
       // Draw a vertical line
       this.sprite = new SHAPES2D.Line(
-        {x: x, y: y - 20, z: 0},
-        {x: x, y: y + 50, z: 0});
+        {x: x, y: y + 20, z: 0},
+        {x: x, y: y - 50, z: 0});
     } else {
       x = this.tape.position;
       y = this.position;
       this.sprite = new SHAPES2D.Line(
-        {x: x + 20, y: y, z: 0},
-        {x: x - 50, y: y, z: 0});
+        {x: x - 20, y: y, z: 0},
+        {x: x + 50, y: y, z: 0});
     }
     this.sprite.addTo(scene);
   }

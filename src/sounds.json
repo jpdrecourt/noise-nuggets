@@ -1,7 +1,14 @@
 {
-  "bell": {
-    "file": "./web/assets/sounds/Bell_A3"},
-  "laugh": {
-    "file": "./web/assets/sounds/laugh"
+  "doorOpen": {
+    "file": "./web/assets/sounds/door_opening"
+  },
+  "doorClose": {
+    "file": "./web/assets/sounds/door_closing"
+  },
+  "seagullRumble" : {
+    "file": "./web/assets/sounds/sea_gull_rumble"
+  },
+  "seagullScream": {
+    "file": "./web/assets/sounds/sea_gull_scream"
   }
 }

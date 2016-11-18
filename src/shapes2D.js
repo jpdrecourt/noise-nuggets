@@ -47,8 +47,8 @@ class Square extends Shape2D {
       new THREE.Vector3(size/2, -size/2, 0.0),
       new THREE.Vector3(-size/2, -size/2, 0.0));
     geometry.faces.push(
-      new THREE.Face3(0, 2, 1),
-      new THREE.Face3(0, 3, 2));
+      new THREE.Face3(0, 1, 2),
+      new THREE.Face3(0, 2, 3));
     this._mesh = new THREE.Mesh(geometry, this._material);
     if (position) this._mesh.position.set(position.x, position.y, position.z);
   }

@@ -15,6 +15,14 @@
       "isHorizontal": true
     },
     {
+      "id": "Tape3",
+      "type": "Tape",
+      "position" : -300,
+      "start": -550,
+      "end": -50,
+      "isHorizontal": true
+    },
+    {
       "id": "Loop1",
       "type": "LoopEvent",
       "tapeId": "Tape1",
@@ -23,6 +31,11 @@
       "id": "Loop2",
       "type": "LoopEvent",
       "tapeId": "Tape2",
+    },
+    {
+      "id": "Loop3",
+      "type": "LoopEvent",
+      "tapeId": "Tape3",
     },
     {
       "id": "Head1",
@@ -39,25 +52,39 @@
       "isForward": true
     },
     {
-      "id": "Sound1",
+      "id": "Head3",
+      "type": "Head",
+      "tapeId": "Tape3",
+      "position": -50,
+      "isForward": false
+    },
+    {
+      "id": "OpenDoor",
       "type": "SoundEvent",
       "tapeId": "Tape1",
-      "position": -250,
-      "sound": "bell"
+      "position": -23,
+      "sound": "doorOpen"
     },
     {
-      "id": "Sound2",
-      "type": "SoundEvent",
-      "tapeId": "Tape2",
-      "position": 130,
-      "sound": "laugh"
-    },
-    {
-      "id": "Sound3",
+      "id": "CloseDoor",
       "type": "SoundEvent",
       "tapeId": "Tape2",
       "position": -40,
-      "sound": "bell"
+      "sound": "doorClose"
+    },
+    {
+      "id": "seagullScream",
+      "type": "SoundEvent",
+      "tapeId": "Tape1",
+      "position": 350,
+      "sound": "seagullScream"
+    },
+    {
+      "id": "seagullRumble",
+      "type": "SoundEvent",
+      "tapeId": "Tape3",
+      "position": -85,
+      "sound": "seagullRumble"
     }
   ]
 }

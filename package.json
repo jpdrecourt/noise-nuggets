@@ -1,7 +1,7 @@
 {
-  "name": "sound-nuggets",
+  "name": "noise-nuggets",
   "version": "1.0.0",
-  "description": "Interface allowing to play sound nuggets - Inspired by 'Cube with magic ribbons' by Simon Katan (https://vimeo.com/36888504) ",
+  "description": "Interface allowing to play noise nuggets - Inspired by 'Cube with magic ribbons' by Simon Katan (https://vimeo.com/36888504) ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jpdrecourt/sound-nuggets.git"
+    "url": "https://github.com/jpdrecourt/noise-nuggets.git"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.14.0",
